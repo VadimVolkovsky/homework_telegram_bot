@@ -128,14 +128,7 @@ def check_tokens():
         return bool
 
 
-if not check_tokens():
-    for key, token in token_dict.items():
-        if not token:
-            message = f'Токен {key} потерялся'
-            logging.error(message)
-            raise exceptions.TokenNotFoundException(message)
-
-
+# flake8: noqa: C901
 def main():
     """Основная логика работы бота."""
     _log_format = '%(asctime)s - %(levelname)s - %(message)s'
@@ -144,6 +137,14 @@ def main():
         format=_log_format,
         handlers=[logging.StreamHandler(sys.stdout)]
     )
+
+    if not check_tokens():
+        for key, token in token_dict.items():
+            if not token:
+                message = f'Токен {key} потерялся'
+                logging.error(message)
+                raise exceptions.TokenNotFoundException(message)
+
 
     bot = telegram.Bot(token=token_dict["TELEGRAM_TOKEN"])
     logger_tg = logging.getLogger()
